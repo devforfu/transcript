@@ -1,0 +1,35 @@
+[build-systems]
+requires = ["setuptools", "setuptools-scm[toml]"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["transcript"]
+
+[tool.setuptools_scm]
+write_to = "pkg/_version.py"
+
+[project]
+name = "transcript"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    # Whisper dependencies
+    "numpy",
+    "torch",
+    "tqdm",
+    "more-itertools",
+    "transformers>=4.19.0",
+    "ffmpeg-python==0.2.0",
+
+    # YouTube videos processing
+    "pytube",
+    "beautifulsoup4",
+
+    # Interactive
+    "jupyter==1.*",
+    "jupyterlab",
+    "ipython",
+    "ipywidgets",
+]
+dynamic = ["version"]
+
