@@ -30,6 +30,10 @@ dependencies = [
     "jupyterlab",
     "ipython",
     "ipywidgets",
+
+    # Tools
+    "click",
+    "fastcore",
 ]
 dynamic = ["version"]
 
