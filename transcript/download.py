@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import io
 import json
+import time
 from dataclasses import dataclass
 from xml.etree import ElementTree
 
@@ -24,17 +27,30 @@ class DownloadJob:
     output_dir: str
     mime_type: str
     max_retries: int = 10
-    skip_existing: float = True
+    skip_existing: bool = True
 
     def __call__(self, link: str) -> None:
-        self._download_caption(self._download_video(link))
+        if video := self._download_video(link):
+            self._download_caption(video)
 
-    def _download_video(self, link) -> YouTube:
-        video = YouTube(link)
-        audio = video.streams.filter(mime_type=self.mime_type).desc().first()
-        audio.download(output_path=self.output_dir, max_retries=self.max_retries,
-                       skip_existing=self.skip_existing)
-        return video
+    def _download_video(self, link) -> YouTube | None:
+        n_attempts, wait = 10, 0.05
+        while n_attempts > 0:
+            try:
+                video = YouTube(link)
+                audio = video.streams.filter(mime_type=self.mime_type).desc().first()
+                audio.download(
+                    output_path=self.output_dir,
+                    max_retries=self.max_retries,
+                    skip_existing=self.skip_existing
+                )
+            except ConnectionResetError:
+                time.sleep(wait)
+                wait *= 2
+                n_attempts -= 1
+            else:
+                return video
+        return None
 
     def _download_caption(self, video: YouTube, language: str = "en") -> None:
         if caption := video.captions.get(language):
