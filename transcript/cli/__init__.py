@@ -1,5 +1,8 @@
 import click
+
 from transcript.cli.download import download
+from transcript.cli.models import download_all_models
+from transcript.cli.transcribe import transcribe
 
 
 @click.group()
@@ -12,3 +15,5 @@ def cli(ctx, debug: bool) -> None:
 
 
 cli.command(download)
+cli.command(download_all_models)
+cli.command(transcribe)
