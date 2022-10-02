@@ -4,6 +4,7 @@ import io
 import json
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from xml.etree import ElementTree
 
 from fastcore.basics import defaults
@@ -54,11 +55,4 @@ class DownloadJob:
 
     def _download_caption(self, video: YouTube, language: str = "en") -> None:
         if caption := video.captions.get(language):
-            parsed = parse_caption(caption)
-            with open(f"{self.output_dir}/{video.title}.json", "w") as fp:
-                json.dump(parsed, fp)
-
-
-def parse_caption(caption: Caption) -> list[dict]:
-    tree = ElementTree.parse(io.StringIO(caption.xml_captions)).getroot()
-    return [{"text": el.text, **el.attrib} for el in tree.findall("body/p")]
+            Path(f"{self.output_dir}/{video.title}.xml").write_text(caption.xml_captions)
