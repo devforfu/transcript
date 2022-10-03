@@ -1,3 +1,6 @@
+from datetime import timedelta
+from timeit import default_timer as timer
+
 import click
 from fastcore.basics import defaults
 
@@ -26,6 +29,7 @@ def transcribe(
     fp16: bool,
 ) -> None:
     click.echo(f"Transcribing audio files from dir: {audio_dir}")
+    started = timer()
     transcribe_all(
         audio_dir,
         output_dir,
@@ -35,3 +39,5 @@ def transcribe(
         n_workers=0 if ctx.obj["DEBUG"] else n_workers,
         decoding_options=DecodingOptions(language=language, fp16=fp16),
     )
+    elapsed = timedelta(seconds=timer() - started)
+    click.echo(f"Processing time: {elapsed}")
