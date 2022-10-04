@@ -23,8 +23,7 @@ dependencies = [
 
     # YouTube videos processing
     "pytube",
-    "beautifulsoup4",
-
+    
     # Interactive
     "jupyter==1.*",
     "jupyterlab",
