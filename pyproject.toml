@@ -33,6 +33,9 @@ dependencies = [
     # Tools
     "click",
     "fastcore",
+    
+    # Other
+    "jiwer",
 ]
 dynamic = ["version"]
 
